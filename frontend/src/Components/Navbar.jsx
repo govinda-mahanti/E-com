@@ -12,6 +12,7 @@ import {
   Home as HomeIcon,
   X
 } from "lucide-react";
+import { BASE_URL } from "../Utils/urlconfig";
 
 
 const Navbar = () => {
@@ -26,7 +27,7 @@ const handleSubmit = async (e) => {
   if (!q) return;
 
   try {
-    const res = await fetch("http://localhost:5000/api/search", {
+    const res = await fetch(`${BASE_URL}/search`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
