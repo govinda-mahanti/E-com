@@ -1,4 +1,4 @@
-import { Product } from "../models/Product.js";
+import { Product } from "../models/productModel.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -24,20 +24,25 @@ export const searchResults = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, description, price, category, rating, image } = req.body;
+    const { name, description, price, category, rating } = req.body;
+
     if (!name || !description || !price || !category) {
-      return res
-        .status(400)
-        .json({ message: "All required fields must be provided." });
+      return res.status(400).json({
+        message: "All required fields must be provided."
+      });
     }
+
+    const imageUrl = req.file?.path;
+
     const newProduct = new Product({
       name,
       description,
       price,
       category,
       rating: rating || 0,
-      image,
+      image: imageUrl,
     });
+
     const savedProduct = await newProduct.save();
 
     return res.status(201).json({
@@ -49,3 +54,4 @@ export const addProduct = async (req, res) => {
     return res.status(500).json({ message: "Server Error", error });
   }
 };
+

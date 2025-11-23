@@ -1,24 +1,36 @@
 import express from "express";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import cors from "cors";
-import productroutes from "./routes/Products.js";
+import { fileURLToPath } from "url";
+import path from "path";
+import connectDB from "./db/db.js";
 dotenv.config();
+
+import ProductRoute from "./routes/productsRoute.js"
+
+// __dirname replacement in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-const PORT = process.env.PORT || 5000;
-const MONGO_URL = process.env.MONGO_URL;
-
-// Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+connectDB();
 
-// Routes
-app.use("/api", productroutes);
+app.get("/", (req, res) => {
+  res.send("Welcome to Ecom server");
+});
 
-//connect to server and database
-app.listen(PORT, async () => console.log(`Server is running on port ${PORT}`));
+app.use("/api", ProductRoute);
 
-mongoose
-  .connect(MONGO_URL, console.log("Connected to MongoDB"))
-  .catch((err) => console.log(err));
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server is running on port ${PORT}`);
+});
