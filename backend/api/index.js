@@ -1,39 +1,36 @@
 import express from "express";
-import serverless from "serverless-http";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import { fileURLToPath } from "url";
 import path from "path";
-
-import connectDB from "../db/db.js";
-import ProductRoute from "./productsRoute.js";
-
+import connectDB from "./db/db.js";
 dotenv.config();
 
-// __dirname polyfill
+import ProductRoute from "./productsRoute.js"
+
+// __dirname replacement in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-
 app.use(
   cors({
-    origin: "*", // allow frontend hosted on Vercel/Netlify
+    origin: "*",
   })
 );
-
 app.use(express.json());
-
-// Connect MongoDB
-await connectDB();
+connectDB();
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Ecom server on Vercel");
+  res.send("Welcome to Ecom server");
 });
 
-// Routes
 app.use("/api", ProductRoute);
 
-// ❌ REMOVE app.listen()
-// Vercel serverless uses export default
-export default serverless(app);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server is running on port ${PORT}`);
+});
