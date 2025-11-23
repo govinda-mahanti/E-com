@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 import connectDB from "../db/db.js";
-import ProductRoute from "../routes/productsRoute.js";
+import ProductRoute from "./productsRoute.js";
 
 dotenv.config();
 
