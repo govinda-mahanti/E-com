@@ -27,8 +27,6 @@ function App() {
           <Route path="profile" element={<ProfileSection />} />
           <Route path="products" element={<Products />} />
           <Route path="searchlist/:query" element={<SearchList />} />
-
-
         </Route>
       </Routes>
     </Router>

@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart } from "lucide-react";
 import FilterBar from "../Components/FilterBar";
 
-function products() {
+function Products() {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState([]);
   const [notification, setNotification] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  const [products, setProducts] = useState([]);       // <-- FETCHED DATA
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [filters, setFilters] = useState({
@@ -222,4 +222,4 @@ function products() {
   );
 }
 
-export default products;
+export default Products;
