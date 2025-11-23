@@ -7,18 +7,15 @@ import path from "path";
 import connectDB from "./db/db.js";
 dotenv.config();
 
-import ProductRoute from "./routes/productsRoute.js"
+import productRoute from "./routes/productsRoute.js"
 
 // __dirname replacement in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+app.use(cors());
+
 app.use(express.json());
 connectDB();
 
@@ -26,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to Ecom server");
 });
 
-app.use("/api", ProductRoute);
+app.use("/api", productRoute);
 
 
 const PORT = process.env.PORT || 5000;

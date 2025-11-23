@@ -13,24 +13,45 @@ import {
   X
 } from "lucide-react";
 
-// -------------------------
-// HeaderNavbar Component
-// -------------------------
+
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const q = search.trim().toLowerCase();
-    if (!q) return;
-    if (q === "sofa") navigate("/product");
-    else if (q === "chair") navigate("/chair");
-    else if (q === "bed") navigate("/bed");
-    else navigate(`/search?q=${encodeURIComponent(q)}`);
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const q = search.trim();
+  if (!q) return;
+
+  try {
+    const res = await fetch("http://localhost:5000/api/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ q }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.log("SERVER RAW RESPONSE:", text);
+      throw new Error("Server returned non-JSON HTML");
+    }
+
+    const data = await res.json();
+
+    navigate(`/searchlist/${encodeURIComponent(q)}`, {
+      state: { results: data },
+    });
+  } catch (error) {
+    console.error("Search API Error:", error);
+  }
+};
+
+
+
 
   return (
     <>
@@ -141,10 +162,10 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6">
-          <NavLink to="/productlist" className={({isActive}) => isActive ? 'underline' : ''}>Deals</NavLink>
-          <NavLink to="/productlist" className={({isActive}) => isActive ? 'underline' : ''}>Grocery & Essentials</NavLink>
-          <NavLink to="/productlist" className={({isActive}) => isActive ? 'underline' : ''}>Easter</NavLink>
-          <NavLink to="/productlist" className={({isActive}) => isActive ? 'underline' : ''}>Walmart Style</NavLink>
+          <NavLink to="/products" className={({isActive}) => isActive ? 'underline' : ''}>Deals</NavLink>
+          <NavLink to="/products" className={({isActive}) => isActive ? 'underline' : ''}>Grocery & Essentials</NavLink>
+          <NavLink to="/products" className={({isActive}) => isActive ? 'underline' : ''}>Easter</NavLink>
+          <NavLink to="/products" className={({isActive}) => isActive ? 'underline' : ''}>Walmart Style</NavLink>
           <NavLink to="/productlist" className={({isActive}) => isActive ? 'underline' : ''}>Baby Days</NavLink>
         </div>
       </nav>
@@ -183,10 +204,10 @@ const Navbar = () => {
                 <Link to="/cart" onClick={() => setSidebarOpen(false)} className="block py-2">Cart</Link>
                 <Link to="/favourites" onClick={() => setSidebarOpen(false)} className="block py-2">Wishlist</Link>
                 <hr className="my-2" />
-                <Link to="/productlist" onClick={() => setSidebarOpen(false)} className="block py-2">Deals</Link>
-                <Link to="/productlist" onClick={() => setSidebarOpen(false)} className="block py-2">Grocery & Essentials</Link>
-                <Link to="/productlist" onClick={() => setSidebarOpen(false)} className="block py-2">Easter</Link>
-                <Link to="/productlist" onClick={() => setSidebarOpen(false)} className="block py-2">Walmart Style</Link>
+                <Link to="/products" onClick={() => setSidebarOpen(false)} className="block py-2">Deals</Link>
+                <Link to="/products" onClick={() => setSidebarOpen(false)} className="block py-2">Grocery & Essentials</Link>
+                <Link to="/products" onClick={() => setSidebarOpen(false)} className="block py-2">Easter</Link>
+                <Link to="/products" onClick={() => setSidebarOpen(false)} className="block py-2">Walmart Style</Link>
                 <Link to="/productlist" onClick={() => setSidebarOpen(false)} className="block py-2">Baby Days</Link>
               </div>
             </motion.aside>

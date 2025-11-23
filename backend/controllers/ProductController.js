@@ -2,7 +2,8 @@ import { Product } from "../models/productModel.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    //console.log(products);
+    // console.log(products);
+    console.log("Fetched all products");
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
@@ -11,16 +12,19 @@ export const getAllProducts = async (req, res) => {
 
 export const searchResults = async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q } = req.body;
+
     const results = await Product.find({
       name: { $regex: q, $options: "i" },
     }).limit(5);
-    // console.log(results);
+
     res.status(200).json(results);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+
 
 export const addProduct = async (req, res) => {
   try {

@@ -9,6 +9,8 @@ import Signup from "./Pages/Signup";
 import Cart from "./Pages/Cart";
 import Favourites from "./Pages/Favourites";
 import ProfileSection from "./Pages/ProfileSection";
+import SearchList from "./Pages/SearchList";
+import Products from "./Pages/Products";
 
 function App() {
   return (
@@ -23,6 +25,10 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="favourites" element={<Favourites />} />
           <Route path="profile" element={<ProfileSection />} />
+          <Route path="products" element={<Products />} />
+          <Route path="searchlist/:query" element={<SearchList />} />
+
+
         </Route>
       </Routes>
     </Router>
